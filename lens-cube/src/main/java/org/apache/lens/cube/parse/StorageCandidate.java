@@ -660,6 +660,10 @@ public class StorageCandidate implements Candidate, CandidateTable {
   }
 
   private boolean evaluateMeasuresCompleteness(TimeRange timeRange) throws LensException {
+    if(getCubeMetastoreClient() == null || !getCubeMetastoreClient().isDataCompletenessCheckEnabled()) {
+      log.info("Skipping availability check as dataCompleteness check is not enabled", fact);
+      return true;
+    }
     String factDataCompletenessTag = fact.getDataCompletenessTag();
     if (factDataCompletenessTag == null) {
       log.info("Not checking completeness for the fact table:{} as the dataCompletenessTag is not set", fact);
@@ -682,7 +686,7 @@ public class StorageCandidate implements Candidate, CandidateTable {
       log.info("No Queried measures with the dataCompletenessTag, hence skipping the availability check");
       return true;
     }
-    boolean isDataComplete = false;
+    boolean isDataComplete = true;
     DataCompletenessChecker completenessChecker = getCubeMetastoreClient().getCompletenessChecker();
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
