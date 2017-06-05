@@ -686,6 +686,7 @@ public class StorageCandidate implements Candidate, CandidateTable {
       log.info("No Queried measures with the dataCompletenessTag, hence skipping the availability check");
       return true;
     }
+    // default completenessTag will be true
     boolean isDataComplete = true;
     DataCompletenessChecker completenessChecker = getCubeMetastoreClient().getCompletenessChecker();
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -708,6 +709,7 @@ public class StorageCandidate implements Candidate, CandidateTable {
             String measureorExprFromTag = tagToMeasureOrExprMap.get(tag);
             dataCompletenessMap.computeIfAbsent(measureorExprFromTag, k -> new HashMap<>())
               .put(formatter.format(completenessResult.getKey()), completenessResult.getValue());
+            // set completeness to false if availability for measure is below threshold
             isDataComplete = false;
           }
         }
