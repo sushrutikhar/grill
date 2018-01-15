@@ -1,13 +1,15 @@
 
 package org.apache.lens.driver.adla;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 
-import org.apache.lens.server.api.driver.AbstractLensDriver;
-import org.apache.lens.server.api.driver.DriverEvent;
-import org.apache.lens.server.api.driver.DriverQueryPlan;
-import org.apache.lens.server.api.driver.LensResultSet;
+import org.apache.lens.driver.adla.translator.SummaryAzureQueryRewriter;
+import org.apache.lens.driver.job.utils.JobUtils;
+import org.apache.lens.server.api.LensConfConstants;
+import org.apache.lens.server.api.driver.*;
+
 import org.apache.lens.server.api.error.LensException;
 import org.apache.lens.server.api.events.LensEventListener;
 import org.apache.lens.server.api.query.AbstractQueryContext;
@@ -16,17 +18,30 @@ import org.apache.lens.server.api.query.QueryContext;
 import org.apache.lens.server.api.query.cost.QueryCost;
 import org.apache.lens.server.api.query.cost.StaticQueryCost;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
 
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+
 public class ADLADriver extends AbstractLensDriver {
 
+    public JobUtils jobUtils;
+
+    String localOutputPath;
+
+    SummaryAzureQueryRewriter queryRewriter = new SummaryAzureQueryRewriter();
+
+    @Override
+    public void configure(Configuration conf, String driverType, String driverName) throws LensException {
+        super.configure(conf, driverType, driverName);
+        localOutputPath = getConf().get(LensConfConstants.DRIVER_OUTPUT_LOCAL_PATH);
+        log.info("ADLA driver {} configured successfully", getFullyQualifiedName());
+    }
 
     @Override
     public QueryCost estimate(AbstractQueryContext qctx) throws LensException {
@@ -35,7 +50,7 @@ public class ADLADriver extends AbstractLensDriver {
 
     @Override
     public DriverQueryPlan explain(AbstractQueryContext explainCtx) throws LensException {
-        throw new LensException("UnSupported operation estimate");
+        throw new LensException("UnSupported operation explain");
     }
 
     @Override
@@ -61,11 +76,34 @@ public class ADLADriver extends AbstractLensDriver {
     @Override
     public void executeAsync(QueryContext context) throws LensException {
         //Submit ADLA JOB
+        log.info("Running query {} ", context.getQueryHandleString());
+        String usqlQuery = queryRewriter.rewrite(context, this);
+        JobUtils.submitJob(context.getQueryHandleString(), usqlQuery, getBearerToken(context));
+    }
+
+
+    private String getBearerToken(QueryContext context) {
+        log.info("bearer token {} ", context.getConf().get("lens.query.bearertoken"));
+        return context.getConf().get("lens.query.bearertoken");
+    }
+
+    private String getUsql(QueryContext context) {
+
+        String dummy = "CREATE EXTERNAL TABLE IF NOT EXISTS wines( id INT,  country STRING,  description STRING,  " +
+                "designation STRING,  points INT,  price DECIMAL,  province STRING,  region_1 STRING,  region_2 STRING," +
+                "  variety STRING,  winery STRING) COMMENT ‘Data about wines from a public database’  ROW FORMAT DELIMITED" +
+                "    FIELDS TERMINATED BY ‘,’ STORED AS TEXTFILE  " +
+                "location ‘adl://puneet879.azuredatalakestore.net/clusters/output/’";
+        return dummy +context.getQueryHandleString()+"/result.csv";
     }
 
     @Override
     public void updateStatus(QueryContext context) throws LensException {
-       //Update status of ADLA JOB
+        //Update status of ADLA JOB
+        log.info("Updating status for query {} ", context.getQueryHandleString());
+        if(System.currentTimeMillis() - context.getSubmissionTime() >10000) {
+            context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.SUCCESSFUL);
+        }
     }
 
     @Override
@@ -106,7 +144,18 @@ public class ADLADriver extends AbstractLensDriver {
     @Override
     protected LensResultSet createResultSet(QueryContext ctx) throws LensException {
         //Get JOB result
-        return null;
-    }
+        log.info("Creating resultset for query {}", ctx.getQueryHandleString());
 
+        String bearerToken = getBearerToken(ctx);
+        InputStream inputStream = jobUtils.getResult(ctx.getQueryHandle().getHandleIdString(), bearerToken);
+        File file = new File(localOutputPath + ctx.getQueryHandle().getHandleIdString() + LensConfConstants.DRIVER_OUTPUT_FILE_NAME);
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Get JOB result
+        return new PersistentADLAResult(file.getPath());
+    }
 }
