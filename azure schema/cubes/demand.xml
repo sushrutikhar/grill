@@ -10,11 +10,82 @@
 <measures>
 	<measure _type="BIGINT" default_aggr="sum" display_string="total_clicks" format_string="format_number(%s,&quot;##################.###&quot;)" name="total_clicks" start_time="2011-04-01T00:00:00.000Z" />
     <measure _type="BIGINT" default_aggr="sum" description="Billable CPM Beacons" display_string="Billable CPM Beacons" format_string="format_number(%s,&quot;##################.###&quot;)" max="100000.0" min="50000.0" name="billable_cpm_beacons" start_time="2013-08-08T00:00:00.000Z" />
+    <measure _type="BIGINT" default_aggr="sum" display_string="cpc_impressions" format_string="format_number(%s,&quot;##################.###&quot;)" name="cpc_impressions" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" display_string="cpm_impressions" format_string="format_number(%s,&quot;##################.###&quot;)" name="cpm_impressions" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="Billable Cpc Clicks" display_string="Billable CPC Clicks" format_string="format_number(%s,&quot;##################.###&quot;)" max="10000.0" min="100.0" name="billable_cpc_clicks" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="CPC Clicks that remained unbilled due to insufficient funds" display_string="Un Billed CPC Clicks" format_string="format_number(%s,&quot;##################.###&quot;)" max="10000.0" min="100.0" name="non_billable_cpc_clicks" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="CPM Ad impressions that remained unbilled due to insufficient funds" display_string="Un Billed CPM Impressions" format_string="format_number(%s,&quot;##################.###&quot;)" max="100000.0" min="1000.0" name="non_billable_impressions" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Total earnings across the system" display_string="Total Burn" format_string="format_number(%s,&quot;##################.###&quot;)" max="9999.0" min="1000.0" name="total_burn" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Total amount earned by agencies" display_string="Agency Revenue" format_string="format_number(%s,&quot;##################.###&quot;)" max="9999.0" min="1000.0" name="agency_revenue" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Potential burn that could not be billed due to insufficient funds" display_string="No Fund Revenue" format_string="format_number(%s,&quot;##################.###&quot;)" max="10000.0" min="100.0" name="nofund_revenue" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Revenue withholded for compliance with tax laws" display_string="Withholded Taxes" format_string="format_number(%s,&quot;##################.###&quot;)" max="7.139027825E9" min="4.503338907E9" name="withhold_taxes" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Creative charges incurred by InMobi for one IO" display_string="Creative Charges" format_string="format_number(%s,&quot;##################.###&quot;)" max="7.139027825E9" min="4.503338907E9" name="creative_charges" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="The discount provided at the IO/RO level" display_string="IO Discount" format_string="format_number(%s,&quot;##################.###&quot;)" max="7.139027825E9" min="4.503338907E9" name="io_discount" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Bulk discount given to advertiser" display_string="Volume Discount" format_string="format_number(%s,&quot;##################.###&quot;)" max="7.139027825E9" min="4.503338907E9" name="volume_discount" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="Cost of data to be settled with Data Seller" display_string="3rd Party Data Enrichment Cost" format_string="format_number(%s,&quot;##################.###&quot;)" max="100000.0" min="100.0" name="data_enrichment_cost" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="Number of terminated clicks we received corresponding to impressions we served" display_string="Terminated Clicks" format_string="format_number(%s,&quot;##################.###&quot;)" max="10000.0" min="100.0" name="terminated_clicks" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="Number of fraud clicks we received corresponding to impressions we served." display_string="Fraud Clicks" format_string="format_number(%s,&quot;##################.###&quot;)" max="10000.0" min="100.0" name="fraud_clicks" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="Number of other invalid clicks (non-fraud/non-terminated) we received corresponding to impressions served like accidental clicks." display_string="Other Invalid Clicks" format_string="format_number(%s,&quot;##################.###&quot;)" max="900000.0" min="100000.0" name="accidental_clicks" start_time="2014-04-09T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="No. of conversions generated from campaigns" display_string="Final Conversion Count" format_string="format_number(%s,&quot;##################.###&quot;)" max="999.0" min="100.0" name="matched_conversions" start_time="2011-09-01T00:00:00.000Z"/>
+    <measure _type="BIGINT" default_aggr="sum" display_string="cpm_impressions" format_string="format_number(%s,&quot;##################.###&quot;)" name="cpm_impressions" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="For date &lt; 2013-07-05-07 : cpc ads served + billed cpm ads impression; For date &gt;= 2013-07-05-07 : cpc ads served + cpm ads served(including both billed and un-billed)" display_string="Ad Impressions Served" format_string="format_number(%s,&quot;##################.###&quot;)" max="9000000.0" min="1000000.0" name="served_impressions" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" display_string="cpm_clicks" format_string="format_number(%s,&quot;##################.###&quot;)" name="cpm_clicks" start_time="2011-04-01T00:00:00.000Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="" display_string="" format_string="format_number(%s,&quot;##################.###&quot;)" max="999.0" min="100.0" name="total_installs" start_time="2015-11-25T00:00:00.000Z"/>
+    <measure _type="DOUBLE" default_aggr="sum" description="Billed Spend" display_string="Billed Spend" format_string="format_number(%s,&quot;##################.###&quot;)" name="bl_billed_spend" start_time="2016-02-18T00:00:00Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Ad Group Investment" display_string="Ad Group Investment" format_string="format_number(%s,&quot;##################.###&quot;)" name="bl_adgroup_investment" start_time="2016-02-18T00:00:00Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Inmobi Investment" display_string="Inmobi Investment" format_string="format_number(%s,&quot;##################.###&quot;)" name="bl_inmobi_investment" start_time="2011-04-01T00:00:00Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Other Valid Clicks - Post CPI" display_string="Other Valid Clicks" format_string="format_number(%s,&quot;##################.###&quot;)" name="other_valid_clicks" start_time="2011-04-01T00:00:00Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Billed Installs" display_string="Billed Installs" format_string="format_number(%s,&quot;##################.###&quot;)" name="bl_billed_installs" start_time="2016-02-18T00:00:00Z">
+    </measure>
+    <measure _type="DOUBLE" default_aggr="sum" description="Unbilled Installs" display_string="Unbilled Installs" format_string="format_number(%s,&quot;##################.###&quot;)" name="bl_unbilled_installs" start_time="2016-02-18T00:00:00Z">
+    </measure>
+    <measure _type="BIGINT" default_aggr="sum" description="Quality video count" display_string="QualityVideoCount (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="vqs_count" start_time="2016-09-08T00:00:00.000Z"/>
+    <measure _type="BIGINT" default_aggr="sum" description="Total number of First Quartiles" display_string="First Quartiles (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="first_quartiles" start_time="2016-07-04T00:00:00.000Z"/>
+    <measure _type="BIGINT" default_aggr="sum" description="Total number of Second Quartiles" display_string="Second Quartiles (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="second_quartiles" start_time="2016-07-04T00:00:00.000Z"/>
+    <measure _type="BIGINT" default_aggr="sum" description="Total number of Third Quartiles" display_string="Third Quartiles (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="third_quartiles" start_time="2016-07-04T00:00:00.000Z"/>
+    <measure _type="BIGINT" default_aggr="sum" description="Total number of Completed Views" display_string="Completed Views (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="completed_views" start_time="2016-07-04T00:00:00.000Z"/>
+    <measure _type="BIGINT" default_aggr="sum" description="Total number of Media Plays beacon" display_string="Media Plays (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="media_plays" start_time="2016-07-04T00:00:00.000Z"/>
+    <measure _type="DOUBLE" default_aggr="sum" description="Video quality score" display_string="VideoQualityScore (Video)" format_string="format_number(%s,&quot;##################.###&quot;)" name="vqs_sum" start_time="2016-09-08T00:00:00.000Z"/>
 </measures>
 <dim_attributes>
 	<dim_attribute _type="timestamp" display_string="event_time" name="event_time" />
 	<dim_attribute _type="timestamp" display_string="request_time" name="event_time" />
 	<dim_attribute _type="string" description="" display_string="" name="adv_account_inc_id" />
 	<dim_attribute _type="string" description="" display_string="" name="adgroup_inc_id" />
+	<dim_attribute _type="string" description="" display_string="" name="adgroup_objective_id" />
+	<dim_attribute _type="string" description="" display_string="" name="pricing_model_id" />
+	<dim_attribute _type="string" description="" display_string="" name="dwh_ad_inc_id" />
+	<dim_attribute _type="string" description="" display_string="" name="campaign_inc_id" />
+	<dim_attribute _type="string" description="" display_string="" name="ad_content_id" />
+	<dim_attribute _type="string" description="" display_string="" name="ad_format_id" />
+	<dim_attribute _type="string" description="" display_string="" name="bl_fund_source_id" />
+	<dim_attribute _type="string" description="" display_string="" name="rq_advbilleventtype" />
+	<dim_attribute _type="string" description="" display_string="" name="rq_pubpayeventtype" />
+	<dim_attribute _type="string" description="" display_string="" name="resolved_slot_size" />
+	<dim_attribute _type="string" description="" display_string="" name="demand_source_type_id" />
+    <dim_attribute _type="string" description="" display_string="" name="is_vta_enabled"/>
 </dim_attributes>
 </x_base_cube>
