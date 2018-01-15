@@ -132,5 +132,4 @@ public class ADLADriver extends AbstractLensDriver {
         log.info("Creating resultset for query {}", ctx.getQueryHandleString());
         return null;
     }
-
 }
