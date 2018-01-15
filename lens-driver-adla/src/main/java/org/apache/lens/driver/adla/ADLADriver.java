@@ -26,7 +26,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@AllArgsConstructor
+
 public class ADLADriver extends AbstractLensDriver {
 
     public JobUtils jobUtils;
