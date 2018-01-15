@@ -12,8 +12,7 @@ import java.io.InputStream;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.UUID;
 
 public class JobUtils {
 
@@ -35,6 +34,7 @@ public class JobUtils {
 
     public static void submitJob(String jobId, String payload, String bearerToken) throws LensException{
         System.out.println(bearerToken.length());
+        payload = payload.replace("\"","\\\"");
         String finalquery = querySkeleton.replace("<<script>>", payload);
         finalquery = finalquery.replace("<<jobid>>", jobId);
         String requestUrl = baseUrl + "jobs/" + jobId +"?api-version=2016-11-01";
@@ -64,9 +64,9 @@ public class JobUtils {
                 return JobState.DOES_NOT_EXIST;
             if (jsonObject.get("result").toString().trim().equals("Succeeded"))
                 return JobState.COMPLETED;
-            if (jsonObject.get("result").toString().trim().equals("Running"))
-                return JobState.RUNNING;
-            return JobState.FAILED;
+            if (jsonObject.get("Failed").toString().trim().equals("Running"))
+                return JobState.FAILED;
+            return JobState.RUNNING;
         } catch (JSONException e) {
             throw new LensException("Unknown error, unable to parse the result");
         }
