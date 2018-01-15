@@ -61,8 +61,25 @@ public class ADLADriver extends AbstractLensDriver {
 
     @Override
     public void executeAsync(QueryContext context) throws LensException {
-        log.info("Running query {} ", context.getQueryHandleString());
         //Submit ADLA JOB
+        log.info("Running query {} ", context.getQueryHandleString());
+        JobUtils.submitJob(context.getQueryHandleString(), getUsql(context), getBearerToken(context));
+    }
+
+
+    private String getBearerToken(QueryContext context) {
+        log.info("bearer token {} ", context.getConf().get("lens.query.bearertoken"));
+        return context.getConf().get("lens.query.bearertoken");
+    }
+
+    private String getUsql(QueryContext context) {
+
+        String dummy = "CREATE EXTERNAL TABLE IF NOT EXISTS wines( id INT,  country STRING,  description STRING,  " +
+                "designation STRING,  points INT,  price DECIMAL,  province STRING,  region_1 STRING,  region_2 STRING," +
+                "  variety STRING,  winery STRING) COMMENT ‘Data about wines from a public database’  ROW FORMAT DELIMITED" +
+                "    FIELDS TERMINATED BY ‘,’ STORED AS TEXTFILE  " +
+                "location ‘adl://puneet879.azuredatalakestore.net/clusters/output/’";
+        return dummy +context.getQueryHandleString()+"/result.csv";
     }
 
     @Override
