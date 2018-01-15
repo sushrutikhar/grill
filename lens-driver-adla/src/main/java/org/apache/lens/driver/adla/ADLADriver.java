@@ -5,6 +5,7 @@ import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 
 import org.apache.lens.cube.parse.HQLParser;
+import org.apache.lens.driver.job.utils.JobUtils;
 import org.apache.lens.server.api.driver.AbstractLensDriver;
 import org.apache.lens.server.api.driver.DriverEvent;
 import org.apache.lens.server.api.driver.DriverQueryPlan;
@@ -26,8 +27,10 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AllArgsConstructor
 public class ADLADriver extends AbstractLensDriver {
 
+    public JobUtils jobUtils;
 
     @Override
     public QueryCost estimate(AbstractQueryContext qctx) throws LensException {
@@ -36,7 +39,7 @@ public class ADLADriver extends AbstractLensDriver {
 
     @Override
     public DriverQueryPlan explain(AbstractQueryContext explainCtx) throws LensException {
-        throw new LensException("UnSupported operation estimate");
+        throw new LensException("UnSupported operation explain");
     }
 
     @Override
