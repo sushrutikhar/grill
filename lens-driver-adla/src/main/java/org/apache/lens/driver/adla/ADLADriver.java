@@ -2,11 +2,9 @@
 package org.apache.lens.driver.adla;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 
-import org.apache.lens.cube.query.cost.FactPartitionBasedQueryCostCalculator;
 import org.apache.lens.driver.job.utils.JobUtils;
 import org.apache.lens.server.api.LensConfConstants;
 import org.apache.lens.server.api.driver.*;
@@ -17,19 +15,15 @@ import org.apache.lens.server.api.query.AbstractQueryContext;
 import org.apache.lens.server.api.query.PreparedQueryContext;
 import org.apache.lens.server.api.query.QueryContext;
 import org.apache.lens.server.api.query.cost.QueryCost;
-import org.apache.lens.server.api.query.cost.QueryCostCalculator;
 import org.apache.lens.server.api.query.cost.StaticQueryCost;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.io.OutputStream;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
 
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lens.server.api.query.priority.CostRangePriorityDecider;
-import org.apache.lens.server.api.query.priority.CostToPriorityRangeConf;
 
 @Slf4j
 @AllArgsConstructor
@@ -149,9 +143,16 @@ public class ADLADriver extends AbstractLensDriver {
         //Get JOB result
         log.info("Creating resultset for query {}", ctx.getQueryHandleString());
 
-        OutputStream outputStream = jobUtils.getResult(ctx.getQueryHandle().getHandleIdString(), "");
+        String bearerToken = getBearerToken(ctx);
+        InputStream inputStream = jobUtils.getResult(ctx.getQueryHandle().getHandleIdString(), bearerToken);
+        File file = new File(localOutputPath + ctx.getQueryHandle().getHandleIdString() + LensConfConstants.DRIVER_OUTPUT_FILE_NAME);
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Get JOB result
-        return null;
+        return new PersistentADLAResult(file.getPath());
     }
 }
