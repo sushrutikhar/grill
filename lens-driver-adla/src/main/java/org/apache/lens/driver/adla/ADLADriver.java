@@ -37,7 +37,7 @@ public class ADLADriver extends AbstractLensDriver {
     public void configure(Configuration conf, String driverType, String driverName) throws LensException {
         super.configure(conf, driverType, driverName);
 
-        localOutputPath = conf.get(LensConfConstants.DRIVER_OUTPUT_LOCAL_PATH) + "";
+        localOutputPath = conf.get(LensConfConstants.DRIVER_OUTPUT_LOCAL_PATH);
         log.info("ADLA driver {} configured successfully", getFullyQualifiedName());
     }
 
@@ -147,17 +147,13 @@ public class ADLADriver extends AbstractLensDriver {
         InputStream inputStream = jobUtils.getResult(ctx.getQueryHandle().getHandleIdString(), bearerToken);
         File file = new File(localOutputPath + ctx.getQueryHandle().getHandleIdString() + LensConfConstants.DRIVER_OUTPUT_FILE_NAME);
         try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
             FileUtils.copyInputStreamToFile(inputStream, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //Get JOB result
-        return new PersistentADLAResult(localOutputPath);
+        return new PersistentADLAResult(file.getPath());
     }
 
 }
