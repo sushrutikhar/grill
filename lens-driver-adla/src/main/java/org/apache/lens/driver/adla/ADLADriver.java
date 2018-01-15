@@ -36,7 +36,7 @@ public class ADLADriver extends AbstractLensDriver {
 
     @Override
     public DriverQueryPlan explain(AbstractQueryContext explainCtx) throws LensException {
-        throw new LensException("UnSupported operation estimate");
+        throw new LensException("UnSupported operation explain");
     }
 
     @Override
