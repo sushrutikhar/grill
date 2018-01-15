@@ -1277,4 +1277,6 @@ public final class LensConfConstants {
   public static final String DRIVER_COST_QUERY_DECIDER = DRIVER_PFX + "cost.query.decider.class";
 
   public static final String DRIVER_OUTPUT_LOCAL_PATH = DRIVER_PFX + "lens.driver.output.local.path";
+
+  public static final String DRIVER_OUTPUT_FILE_NAME =  "out.csv";
 }

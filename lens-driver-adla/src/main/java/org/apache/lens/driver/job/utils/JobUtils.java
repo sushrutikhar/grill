@@ -3,6 +3,7 @@ package org.apache.lens.driver.job.utils;
 import lombok.Data;
 import org.apache.lens.driver.job.states.JobState;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 
 @Data
@@ -18,7 +19,7 @@ public class JobUtils {
         return JobState.COMPLETED;
     }
 
-    public static OutputStream getResult(String jobId, String bearerToken) {
+    public static InputStream getResult(String jobId, String bearerToken) {
         return null;
     }
 
