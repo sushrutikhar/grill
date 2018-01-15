@@ -36,8 +36,7 @@ public class ADLADriver extends AbstractLensDriver {
     @Override
     public void configure(Configuration conf, String driverType, String driverName) throws LensException {
         super.configure(conf, driverType, driverName);
-
-        localOutputPath = conf.get(LensConfConstants.DRIVER_OUTPUT_LOCAL_PATH);
+        localOutputPath = getConf().get(LensConfConstants.DRIVER_OUTPUT_LOCAL_PATH);
         log.info("ADLA driver {} configured successfully", getFullyQualifiedName());
     }
 

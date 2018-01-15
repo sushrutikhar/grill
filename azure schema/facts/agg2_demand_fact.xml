@@ -78,6 +78,7 @@
             <time_part_cols>et</time_part_cols>
           </table_desc>
         </update_period_table_descriptor>
+      </update_periods>
       <storage_name>adla</storage_name>
     </storage_table>
   </storage_tables>
