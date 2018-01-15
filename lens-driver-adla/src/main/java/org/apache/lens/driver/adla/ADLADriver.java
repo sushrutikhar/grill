@@ -5,10 +5,7 @@ import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 
 import org.apache.lens.cube.parse.HQLParser;
-import org.apache.lens.server.api.driver.AbstractLensDriver;
-import org.apache.lens.server.api.driver.DriverEvent;
-import org.apache.lens.server.api.driver.DriverQueryPlan;
-import org.apache.lens.server.api.driver.LensResultSet;
+import org.apache.lens.server.api.driver.*;
 import org.apache.lens.server.api.error.LensException;
 import org.apache.lens.server.api.events.LensEventListener;
 import org.apache.lens.server.api.query.AbstractQueryContext;
@@ -61,12 +58,17 @@ public class ADLADriver extends AbstractLensDriver {
 
     @Override
     public void executeAsync(QueryContext context) throws LensException {
+        log.info("Running query {} ", context.getQueryHandleString());
         //Submit ADLA JOB
     }
 
     @Override
     public void updateStatus(QueryContext context) throws LensException {
-       //Update status of ADLA JOB
+        //Update status of ADLA JOB
+        log.info("Updating status for query {} ", context.getQueryHandleString());
+        if(System.currentTimeMillis() - context.getSubmissionTime() >10000) {
+            context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.SUCCESSFUL);
+        }
     }
 
     @Override
@@ -107,6 +109,7 @@ public class ADLADriver extends AbstractLensDriver {
     @Override
     protected LensResultSet createResultSet(QueryContext ctx) throws LensException {
         //Get JOB result
+        log.info("Creating resultset for query {}", context.getQueryHandleString());
         return null;
     }
 
