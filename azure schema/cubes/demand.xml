@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x_base_cube xmlns="uri:lens:cube:0.1" description="brand demand cube" name="brand">
+  <properties>
+    <property name="cube.timedim.partition.process_time" value="pt"/>
+    <property name="cube.timedim.partition.event_time" value="et"/>
+    <property name="cube.brand.timed.dimensions.list" value="process_time,request_time,event_time"/>
+    <property name="cube.timedim.partition.request_time" value="it"/>
+    <property name="cube.table.brand.weight" value="1000.0"/>
+ </properties>
+<measures>
+	<measure _type="BIGINT" default_aggr="sum" display_string="total_clicks" format_string="format_number(%s,&quot;##################.###&quot;)" name="total_clicks" start_time="2011-04-01T00:00:00.000Z" />
+    <measure _type="BIGINT" default_aggr="sum" description="Billable CPM Beacons" display_string="Billable CPM Beacons" format_string="format_number(%s,&quot;##################.###&quot;)" max="100000.0" min="50000.0" name="billable_cpm_beacons" start_time="2013-08-08T00:00:00.000Z" />
+</measures>
+<dim_attributes>
+	<dim_attribute _type="timestamp" display_string="event_time" name="event_time" />
+	<dim_attribute _type="timestamp" display_string="request_time" name="event_time" />
+	<dim_attribute _type="string" description="" display_string="" name="adv_account_inc_id" />
+	<dim_attribute _type="string" description="" display_string="" name="adgroup_inc_id" />
+</dim_attributes>
+</x_base_cube>
