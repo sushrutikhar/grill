@@ -4,6 +4,7 @@ package org.apache.lens.driver.adla;
 import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 
+import org.apache.lens.cube.parse.HQLParser;
 import org.apache.lens.server.api.driver.AbstractLensDriver;
 import org.apache.lens.server.api.driver.DriverEvent;
 import org.apache.lens.server.api.driver.DriverQueryPlan;
