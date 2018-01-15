@@ -1,28 +1,24 @@
 package org.apache.lens.driver.job.utils;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.lens.driver.job.states.JobState;
 
 import java.io.OutputStream;
 
 @Data
-@AllArgsConstructor
 public class JobUtils {
 
-    private String bearerToken;
+    private String baseUrl = "https://yoda.azuredatalakeanalytics.net/";
 
-    private String baseUrl;
-
-    public void submitJob(String jobId, String payload){
+    public static void submitJob(String jobId, String payload, String bearerToken){
 
     }
 
-    public JobState getStatus(String jobId) {
+    public static JobState getStatus(String jobId, String bearerToken) {
         return JobState.COMPLETED;
     }
 
-    public OutputStream getResult(String jobId) {
+    public static OutputStream getResult(String jobId, String bearerToken) {
         return null;
     }
 
