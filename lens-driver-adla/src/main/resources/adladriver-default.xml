@@ -294,4 +294,10 @@
     <description>Cost based Query type mapping</description>
   </property>
 
+  <property>
+    <name>lens.driver.output.local.path</name>
+    <value>/tmp/lens-driver-adla/src/main/resources/out.csv</value>
+    <description>Cost based Query type mapping</description>
+  </property>
+
 </configuration>

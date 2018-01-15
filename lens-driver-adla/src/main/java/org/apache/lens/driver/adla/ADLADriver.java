@@ -1,10 +1,14 @@
 
 package org.apache.lens.driver.adla;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 
+import org.apache.lens.cube.query.cost.FactPartitionBasedQueryCostCalculator;
 import org.apache.lens.driver.job.utils.JobUtils;
+import org.apache.lens.server.api.LensConfConstants;
 import org.apache.lens.server.api.driver.*;
 
 import org.apache.lens.server.api.error.LensException;
@@ -13,21 +17,35 @@ import org.apache.lens.server.api.query.AbstractQueryContext;
 import org.apache.lens.server.api.query.PreparedQueryContext;
 import org.apache.lens.server.api.query.QueryContext;
 import org.apache.lens.server.api.query.cost.QueryCost;
+import org.apache.lens.server.api.query.cost.QueryCostCalculator;
 import org.apache.lens.server.api.query.cost.StaticQueryCost;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.OutputStream;
 
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lens.server.api.query.priority.CostRangePriorityDecider;
+import org.apache.lens.server.api.query.priority.CostToPriorityRangeConf;
 
 @Slf4j
 @AllArgsConstructor
 public class ADLADriver extends AbstractLensDriver {
 
     public JobUtils jobUtils;
+
+    String localOutputPath;
+
+    @Override
+    public void configure(Configuration conf, String driverType, String driverName) throws LensException {
+        super.configure(conf, driverType, driverName);
+
+        localOutputPath = conf.get(LensConfConstants.DRIVER_OUTPUT_LOCAL_PATH);
+        log.info("ADLA driver {} configured successfully", getFullyQualifiedName());
+    }
 
     @Override
     public QueryCost estimate(AbstractQueryContext qctx) throws LensException {
@@ -113,6 +131,10 @@ public class ADLADriver extends AbstractLensDriver {
     protected LensResultSet createResultSet(QueryContext ctx) throws LensException {
         //Get JOB result
         log.info("Creating resultset for query {}", ctx.getQueryHandleString());
+
+        OutputStream outputStream = jobUtils.getResult(ctx.getQueryHandle().getHandleIdString(), "");
+
+        //Get JOB result
         return null;
     }
 
