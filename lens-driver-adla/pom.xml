@@ -92,11 +92,21 @@
       <artifactId>hadoop-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>1.8</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.lens</groupId>
       <artifactId>lens-server-api</artifactId>
       <type>test-jar</type>
       <version>${project.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
     </dependency>
     <dependency>
       <groupId>org.datanucleus</groupId>
