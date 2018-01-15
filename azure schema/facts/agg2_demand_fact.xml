@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><x_fact_table xmlns="uri:lens:cube:0.1" cube_name="demand" name="agg2_demand_fact" weight="10.0">
+  <columns>
+    <column _type="timestamp" comment="" name="event_time"/>
+    <column _type="timestamp" comment="" name="request_time"/>
+    <column _type="bigint" comment="" name="adv_account_inc_id"/>
+    <column _type="bigint" comment="" name="adgroup_inc_id"/>
+    <column _type="bigint" comment="" name="adgroup_objective_id"/>
+    <column _type="bigint" comment="" name="pricing_model_id"/>
+    <column _type="bigint" comment="" name="dwh_ad_inc_id"/>
+    <column _type="bigint" comment="" name="campaign_inc_id"/>
+    <column _type="bigint" comment="" name="ad_content_id"/>
+    <column _type="bigint" comment="" name="ad_format_id"/>
+    <column _type="bigint" comment="" name="bl_fund_source_id"/>
+    <column _type="bigint" comment="" name="cpc_impressions"/>
+    <column _type="bigint" comment="" name="cpm_impressions"/>
+    <column _type="bigint" comment="" name="billable_cpc_clicks"/>
+    <column _type="bigint" comment="" name="non_billable_cpc_clicks"/>
+    <column _type="bigint" comment="" name="non_billable_impressions"/>
+    <column _type="double" comment="" name="total_burn"/>
+    <column _type="double" comment="" name="agency_revenue"/>
+    <column _type="double" comment="" name="nofund_revenue"/>
+    <column _type="double" comment="" name="withhold_taxes"/>
+    <column _type="double" comment="" name="creative_charges"/>
+    <column _type="double" comment="" name="io_discount"/>
+    <column _type="double" comment="" name="volume_discount"/>
+    <column _type="bigint" comment="" name="billable_cpm_beacons"/>
+    <column _type="double" comment="" name="data_enrichment_cost"/>
+    <column _type="bigint" comment="" name="terminated_clicks"/>
+    <column _type="bigint" comment="" name="fraud_clicks"/>
+    <column _type="bigint" comment="" name="total_clicks"/>
+    <column _type="bigint" comment="" name="accidental_clicks"/>
+    <column _type="bigint" comment="" name="matched_conversions"/>
+    <column _type="bigint" comment="" name="served_impressions"/>
+    <column _type="bigint" comment="" name="cpm_clicks"/>
+    <column _type="bigint" comment="" name="total_installs"/>
+    <column _type="string" comment="" name="rq_advbilleventtype"/>
+    <column _type="string" comment="" name="rq_pubpayeventtype"/>
+    <column _type="double" comment="" name="bl_billed_spend"/>
+    <column _type="double" comment="" name="bl_adgroup_investment"/>
+    <column _type="double" comment="" name="bl_inmobi_investment"/>
+    <column _type="bigint" comment="" name="other_valid_clicks"/>
+    <column _type="bigint" comment="" name="bl_billed_installs"/>
+    <column _type="bigint" comment="" name="bl_unbilled_installs"/>
+    <column _type="string" comment="" name="is_vta_enabled"/>
+    <column _type="string" comment="" name="resolved_slot_size"/>
+    <column _type="bigint" comment="" name="vqs_count"/>
+    <column _type="bigint" comment="" name="first_quartiles"/>
+    <column _type="bigint" comment="" name="second_quartiles"/>
+    <column _type="bigint" comment="" name="third_quartiles"/>
+    <column _type="bigint" comment="" name="completed_views"/>
+    <column _type="bigint" comment="" name="media_plays"/>
+    <column _type="double" comment="" name="vqs_sum"/>
+    <column _type="bigint" comment="" name="demand_source_type_id" start_time="2017-04-27"/>
+  </columns>
+  <properties>
+    <property name="cube.fact.is.aggregated" value="true"/>
+    <property name="cube.fact.relative.start.time" value="-1000 days"/>
+    <property name="cube.fact.absolute.start.time" value="2018-01-01"/>
+    <property name="cube.fact.datacompleteness.tag" value="unified"/>
+  </properties>
+  <storage_tables>
+    <storage_table>
+      <update_periods>
+        <update_period_table_descriptor>
+          <update_period>HOURLY</update_period>
+          <table_desc compressed="false" external="true" input_format="org.apache.hadoop.mapred.TextInputFormat" num_buckets="0" output_format="org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat" serde_class_name="org.apache.lens.storage.db.DBSerde" storage_handler_name="org.apache.lens.storage.db.DBStorageHandler">
+            <part_cols>
+              <column _type="string" comment="date partition" name="pt"/>
+              <column _type="string" comment="date partition" name="et"/>
+            </part_cols>
+            <table_parameters>
+              <property name="lens.metastore.native.table.name" value="hour_agg2_demand_fact_pie_v"/>
+              <property name="lens.metastore.native.db.name" value="unified_global_dw"/>
+              <property name="lens.metastore.native.table.column.mapping" value="pt=process_time,bl_fund_source_id=fund_source_id,billable_cpc_clicks=billed_cpc_clicks,rq_advbilleventtype=adv_bill_event_type,rq_pubpayeventtype=pub_pay_event_type,bl_billed_spend=billed_spend,bl_adgroup_investment=ad_group_investment,bl_inmobi_investment=inmobi_investment,bl_billed_installs=billed_installs,bl_unbilled_installs=unbilled_installs,dwh_ad_inc_id=ad_inc_id,billable_cpm_beacons=cpm_billed_beacons"/>
+              <property name="cube.storagetable.start.times" value="now -4 days"/>
+            </table_parameters>
+            <time_part_cols>pt</time_part_cols>
+            <time_part_cols>et</time_part_cols>
+          </table_desc>
+        </update_period_table_descriptor>
+      <storage_name>adla</storage_name>
+    </storage_table>
+  </storage_tables>
+</x_fact_table>

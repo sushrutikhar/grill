@@ -10,6 +10,11 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class JobUtils {
 
     private static final String baseUrl = "https://yoda.azuredatalakeanalytics.net/";
@@ -67,8 +72,12 @@ public class JobUtils {
         }
     }
 
-    public static InputStream getResult(String jobId, String bearerToken) {
-        return null;
+    public static InputStream getResult(String jobId, String bearerToken) throws LensException{
+        try {
+            return new FileInputStream("/tmp/dummy.csv");
+        } catch (FileNotFoundException e) {
+            throw new LensException(e);
+        }
     }
 
 
