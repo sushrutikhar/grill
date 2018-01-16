@@ -89,9 +89,14 @@ public class ADLADriver extends AbstractLensDriver {
   @Override
   public void executeAsync(QueryContext context) throws LensException {
     //Submit ADLA JOB
-    log.info("Running query {} ", context.getQueryHandleString());
-    String usqlQuery = queryRewriter.rewrite(context, this);
-    JobUtils.submitJob(context.getQueryHandleString(), usqlQuery, getBearerToken(context));
+    log.info("Submitting query {} ", context.getQueryHandleString());
+    try {
+      String usqlQuery = queryRewriter.rewrite(context, this);
+      JobUtils.submitJob(context.getQueryHandleString(), usqlQuery, getBearerToken(context));
+      log.info("Submitted query {} successfully", context.getQueryHandleString());
+    } catch (Exception e) {
+      log.error("Filed to submit query {}", context.getQueryHandleString(),e);
+    }
   }
 
 
@@ -100,7 +105,7 @@ public class ADLADriver extends AbstractLensDriver {
     return context.getConf().get("lens.query.bearertoken");
   }
 
-  private String getUsql(QueryContext context) {
+/*  private String getUsql(QueryContext context) {
 
     String dummy = "CREATE EXTERNAL TABLE IF NOT EXISTS wines( id INT,  country STRING,  description STRING,  "
       + "designation STRING,  points INT,  price DECIMAL,  province STRING,  region_1 STRING,  region_2 STRING,"
@@ -108,7 +113,7 @@ public class ADLADriver extends AbstractLensDriver {
       + "    FIELDS TERMINATED BY ‘,’ STORED AS TEXTFILE  "
       + "location ‘adl://puneet879.azuredatalakestore.net/clusters/output/’";
     return dummy + context.getQueryHandleString() + "/result.csv";
-  }
+  }*/
 
   @Override
   public void updateStatus(QueryContext context) throws LensException {

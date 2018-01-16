@@ -32,7 +32,10 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JobUtils {
 
   private JobUtils() {}
@@ -54,7 +57,7 @@ public class JobUtils {
     + "}  ";
 
   public static void submitJob(String jobId, String payload, String bearerToken) throws LensException {
-    System.out.println(bearerToken.length());
+    log.info("Submitting job {}  with payload {} and bearerToken {}", jobId, payload, bearerToken);
     payload = payload.replace("\"", "\\\"");
     String finalquery = querySkeleton.replace("<<script>>", payload);
     finalquery = finalquery.replace("<<jobid>>", jobId);
@@ -68,7 +71,8 @@ public class JobUtils {
     System.out.println(output);
     System.out.println(finalquery);
     if (response.getStatus() != 200) {
-      throw new LensException();
+      log.error("Filed to submit JOB on ADLA. Job ID {}", jobId);
+      throw new LensException("Filed to submit JOB on ADLA. Job ID  " +jobId);
     }
   }
 

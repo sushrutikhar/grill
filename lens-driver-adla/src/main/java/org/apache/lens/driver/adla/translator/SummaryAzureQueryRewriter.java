@@ -79,9 +79,8 @@ public class SummaryAzureQueryRewriter extends ColumnarSQLRewriter {
   @Override
   public String rewrite(String query, Configuration conf, HiveConf metastoreConf) throws LensException {
     this.query = query;
-    String reWritten = rewrite(HQLParser.parseHQL(query, metastoreConf), conf, metastoreConf, true);
-
     log.info("Input Query : {}", query);
+    String reWritten = rewrite(HQLParser.parseHQL(query, metastoreConf), conf, metastoreConf, true);
     log.info("Rewritten Query : {}", reWritten);
     return reWritten;
   }
