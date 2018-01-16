@@ -32,6 +32,10 @@
   <packaging>jar</packaging>
   <description>ADLA execution driver</description>
 
+  <properties>
+    <mvn.classpath.file>${pom.basedir}/target/classpath</mvn.classpath.file>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -92,9 +96,8 @@
       <artifactId>hadoop-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.sun.jersey</groupId>
+      <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-client</artifactId>
-      <version>1.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lens</groupId>
@@ -123,30 +126,35 @@
       <groupId>org.datanucleus</groupId>
       <artifactId>javax.jdo</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.lens</groupId>
+      <artifactId>lens-driver-jdbc</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
-  <testResources>
-    <testResource>
-      <directory>${project.basedir}/src/test/resources</directory>
-      <filtering>true</filtering>
-    </testResource>
-  </testResources>
-  <plugins>
-   <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <hadoop.bin.path>${pom.basedir}/../lens-driver-hive/testutils/hadoop</hadoop.bin.path>
-          </systemPropertyVariables>
-          <environmentVariables>
-            <MVN_CLASSPATH_FILE>${mvn.classpath.file}</MVN_CLASSPATH_FILE>
-          </environmentVariables>
-          <argLine>-Xms256m -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=256m</argLine>
-        </configuration>
-      </plugin>
-  </plugins>
+    <testResources>
+      <testResource>
+        <directory>${project.basedir}/src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+    <plugins>
+     <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <systemPropertyVariables>
+              <hadoop.bin.path>${pom.basedir}/../lens-driver-hive/testutils/hadoop</hadoop.bin.path>
+            </systemPropertyVariables>
+            <environmentVariables>
+              <MVN_CLASSPATH_FILE>${mvn.classpath.file}</MVN_CLASSPATH_FILE>
+            </environmentVariables>
+            <argLine>-Xms256m -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=256m</argLine>
+          </configuration>
+        </plugin>
+    </plugins>
   </build>
 
 </project>
