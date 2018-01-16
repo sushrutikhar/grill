@@ -46,13 +46,10 @@ public class TestSummaryAzureQueryRewriter {
   public void testQueryRewrite() throws LensException {
     LensDriver driver = new ADLADriver();
     Configuration baseConf = new Configuration();
-    driver.configure(baseConf, "jdbc", "jdbc1");
+    driver.configure(baseConf, "adla", "adla1");
     assertNotNull(driver);
     SessionState.start(new HiveConf(ColumnarSQLRewriter.class));
     SummaryAzureQueryRewriter summaryAzureQueryRewriter = new SummaryAzureQueryRewriter();
-    String userQuery = "select adv_account_inc_id, campaign_inc_id , total_burn as burn, total_clicks "
-      + "from ua where time_range_in(event_time, '2018-01-01-00', '2018-01-02-00') and adv_account_inc_id"
-      + " in (208261, 180154) having total_clicks > 0 order by burn limit 10";
     String driverQuery = "SELECT (ua.adv_account_inc_id) as `adv_account_inc_id`, (ua.campaign_inc_id)"
       + " as `campaign_inc_id`, sum((ua.total_burn)) as `burn`, sum((ua.total_clicks)) as `total_clicks` "
       + "FROM yoda.daily_dfw1_dwh_pe_agg2_demand_fact_ua ua WHERE ((ua.event_time) in "
@@ -85,6 +82,7 @@ public class TestSummaryAzureQueryRewriter {
       + " > 0));@orderby = SELECT [adv_account_inc_id], [campaign_inc_id], [burn], [total_clicks] "
       + "FROM @groupby ORDER BY burn ASC OFFSET 0 ROWS  FETCH 10 ROWS; OUTPUT @orderby TO"
       + " \"/clusters/output/<<jobid>>.csv\" USING Outputters.Csv();",
-      summaryAzureQueryRewriter.rewrite(context, driver));
+      summaryAzureQueryRewriter.rewrite(context, driver)
+    );
   }
 }
