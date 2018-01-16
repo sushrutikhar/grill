@@ -137,13 +137,13 @@ public class ADLADriver extends AbstractLensDriver {
     }
 
     if (state.equals(JobState.COMPLETED)){
-      log.error("State for job {} is COMPLETED", context.getQueryHandleString());
+      log.info("State for job {} is COMPLETED", context.getQueryHandleString());
       context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.SUCCESSFUL);
     } else if (state.equals(JobState.FAILED)){
       log.error("State for job {} is FAILED", context.getQueryHandleString());
       context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.FAILED);
     } else if (state.equals(JobState.RUNNING)){
-      log.error("State for job {} is RUNNING", context.getQueryHandleString());
+      log.info("State for job {} is RUNNING", context.getQueryHandleString());
       context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.RUNNING);
     } else if (state.equals(JobState.DOES_NOT_EXIST)){
       log.error("Could not find state for job {}", context.getQueryHandleString());
