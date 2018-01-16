@@ -34,7 +34,10 @@ import org.glassfish.jersey.filter.LoggingFilter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 public class JobUtils {
 
   private JobUtils() {}
@@ -56,7 +59,7 @@ public class JobUtils {
     + "}  ";
 
   public static void submitJob(String jobId, String payload, String bearerToken) throws LensException {
-    System.out.println(bearerToken.length());
+    log.info("Submitting job {}  with payload {} and bearerToken {}", jobId, payload, bearerToken);
     payload = payload.replace("\"", "\\\"");
     String finalquery = querySkeleton.replace("<<script>>", payload);
     finalquery = finalquery.replace("<<jobid>>", jobId);
@@ -67,7 +70,8 @@ public class JobUtils {
     x = x.accept("application/json");
     Response response = x.put(Entity.entity(finalquery, MediaType.APPLICATION_JSON));
     if (response.getStatus() != 200) {
-      throw new LensException();
+      log.error("Filed to submit JOB on ADLA. Job ID {}", jobId);
+      throw new LensException("Filed to submit JOB on ADLA. Job ID  " +jobId);
     }
     String output = response.readEntity(String.class);
     System.out.println(output);
@@ -109,9 +113,5 @@ public class JobUtils {
       throw new LensException(e);
     }
   }
-
-/*  public static void main(String[] args) throws LensException {
-    JobUtils.getStatus("aa96c2e1-8f55-4fa6-b95f-ae85b25a1a0f", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ino0NHdNZEh1OHdLc3VtcmJmYUs5OHF4czVZSSIsImtpZCI6Ino0NHdNZEh1OHdLc3VtcmJmYUs5OHF4czVZSSJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC84NzhmNmIzMS1mZWVhLTQyYmMtYTk1ZC1kNDQ5NmY5YmVmNjkvIiwiaWF0IjoxNTE2MDc3MTc2LCJuYmYiOjE1MTYwNzcxNzYsImV4cCI6MTUxNjA4MTA3NiwiYWNyIjoiMSIsImFpbyI6IlkyTmdZSWkxdWhLZ2xaYVI5cnByY2JIK2JMMzBhVDRCRlg4bWxMd1EzNlYza09YNDBob0EiLCJhbHRzZWNpZCI6IjE6bGl2ZS5jb206MDAwMzQwMDFBQzNDNzZGRiIsImFtciI6WyJwd2QiXSwiYXBwaWQiOiJjNDRiNDA4My0zYmIwLTQ5YzEtYjQ3ZC05NzRlNTNjYmRmM2MiLCJhcHBpZGFjciI6IjIiLCJlX2V4cCI6MjYyODAwLCJlbWFpbCI6InB1bmVldGd1cHRhQG91dGxvb2suY29tIiwiZmFtaWx5X25hbWUiOiJHdXB0YSIsImdpdmVuX25hbWUiOiJQdW5lZXQiLCJncm91cHMiOlsiNDQwZDg5MjctYTY0Yi00MjJiLWI2YzktNDE2NTIwYzA0ZGY1IiwiOGY1NGMwZGItMjYwZi00NWVjLTk1ZTUtMTc2MTkxYTIxNWNkIl0sImlkcCI6ImxpdmUuY29tIiwiaXBhZGRyIjoiMTQuMTQyLjEwNC4xNzAiLCJuYW1lIjoiUHVuZWV0IEd1cHRhIiwib2lkIjoiMmI4ZWZkYzEtZDQwMy00MjQwLWExZDktMjhhYjM1MTI3NDgyIiwicHVpZCI6IjEwMDMzRkZGQTc5NTNBMjAiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJnREZYZEVPbk43VjdEWDlhd0RQMVdKbmtERGxUYW53c0tJZEx0NU1hNG0wIiwidGlkIjoiODc4ZjZiMzEtZmVlYS00MmJjLWE5NWQtZDQ0OTZmOWJlZjY5IiwidW5pcXVlX25hbWUiOiJsaXZlLmNvbSNwdW5lZXRndXB0YUBvdXRsb29rLmNvbSIsInV0aSI6IlNqNUJJdVB1S2ttaV9HSW9BdndsQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCJdfQ.o67mpIbcsnpR_SJOMGRY73NMXr4VfXXtAMOx6aA8OcV8f1VWzyB2Ovo2C6-TTySqmR01HHtT5A1phOWSEnngb3sGo26UnwAUeXCuloeZ2iuXeR0sSOcyYcAdwNn-5ELhy-oGDvYTt3z5fhNK0vhblqRl7xaob0-3epMnuPVw41i1sTT4fqh7OfqY50qr85lOZBeHF8ctEEc_iylt4wd3MKbG4JT12QTI_0Amuqiqsczbr2PtjHMp2BjSQiyRo0OjyKqvPrUKCrc0Uu0lDtgMwQvf2eVMT9k4CIvLqEE1UIXtnTg_ARzk-EsC8EZlkovi9MgkiyFJzacM5ZMKMXdNKw");
-  }*/
 
 }
