@@ -22,18 +22,20 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.lens.driver.job.states.JobState;
 import org.apache.lens.server.api.error.LensException;
 
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
-import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 public class JobUtils {
@@ -42,7 +44,7 @@ public class JobUtils {
 
   private static String baseUrl = "https://yoda.azuredatalakeanalytics.net/";
 
-  private static Client client = Client.create();
+  private static Client client = ClientBuilder.newClient(new ClientConfig().register(LoggingFilter.class));
 
   private static String querySkeleton = "{  \n"
     + "  \"jobId\": \"<<jobid>>\",  \n"
@@ -62,29 +64,31 @@ public class JobUtils {
     String finalquery = querySkeleton.replace("<<script>>", payload);
     finalquery = finalquery.replace("<<jobid>>", jobId);
     String requestUrl = baseUrl + "jobs/" + jobId + "?api-version=2016-11-01";
-    WebResource webResource = client.resource(requestUrl);
-    WebResource.Builder x = webResource.header("Content-Type", "application/json");
+    WebTarget webResource = client.target(requestUrl);
+    Invocation.Builder x = webResource.request(MediaType.APPLICATION_JSON);
     x = x.header("Authorization", bearerToken);
     x = x.accept("application/json");
-    ClientResponse response = x.put(ClientResponse.class, finalquery);
-    String output = response.getEntity(String.class);
-    System.out.println(output);
-    System.out.println(finalquery);
+    Response response = x.put(Entity.entity(finalquery, MediaType.APPLICATION_JSON));
     if (response.getStatus() != 200) {
       log.error("Filed to submit JOB on ADLA. Job ID {}", jobId);
       throw new LensException("Filed to submit JOB on ADLA. Job ID  " +jobId);
     }
+    String output = response.readEntity(String.class);
+    System.out.println(output);
+    System.out.println(finalquery);
   }
 
   public static JobState getStatus(String jobId, String bearerToken) throws LensException {
-    System.out.println(bearerToken.length());
     String requestUrl = baseUrl + "jobs/" + jobId + "?api-version=2016-11-01";
-    WebResource webResource = client.resource(requestUrl);
-    WebResource.Builder x = webResource.header("Content-Type", "application/json");
+    WebTarget webResource = client.target(requestUrl);
+    Invocation.Builder x = webResource.request(MediaType.APPLICATION_JSON);
     x = x.header("Authorization", bearerToken);
     x = x.accept("application/json");
-    ClientResponse response = x.get(ClientResponse.class);
-    String output = response.getEntity(String.class);
+    Response response = x.get();
+    if (response.getStatus() != 200) {
+      throw new LensException();
+    }
+    String output = response.readEntity(String.class);
     try {
       JSONObject jsonObject = new JSONObject(output);
       if (jsonObject.get("result") == null) {
@@ -109,6 +113,5 @@ public class JobUtils {
       throw new LensException(e);
     }
   }
-
 
 }

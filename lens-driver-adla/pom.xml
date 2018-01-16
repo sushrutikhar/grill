@@ -96,9 +96,8 @@
       <artifactId>hadoop-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.sun.jersey</groupId>
+      <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-client</artifactId>
-      <version>1.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lens</groupId>

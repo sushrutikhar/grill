@@ -95,7 +95,7 @@ public class ADLADriver extends AbstractLensDriver {
       JobUtils.submitJob(context.getQueryHandleString(), usqlQuery, getBearerToken(context));
       log.info("Submitted query {} successfully", context.getQueryHandleString());
     } catch (Exception e) {
-      log.error("Filed to submit query {}", context.getQueryHandleString(),e);
+      log.error("Filed to submit query {}", context.getQueryHandleString(), e);
     }
   }
 
