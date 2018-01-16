@@ -39,9 +39,7 @@ import org.apache.commons.io.FileUtils;
 
 import org.apache.hadoop.conf.Configuration;
 
-
 import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableServer.THREAD_POLICY_ID;
 
 @Slf4j
 
@@ -124,12 +122,12 @@ public class ADLADriver extends AbstractLensDriver {
     try {
       Thread.sleep(2000);
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      log.error("Error {} stacktrace {}", e.getMessage(),  e.getStackTrace());
     }
 
     JobState state = null;
     try {
-      state = JobUtils.getStatus(context.getQueryHandleString(),getBearerToken(context));
+      state = JobUtils.getStatus(context.getQueryHandleString(), getBearerToken(context));
     } catch (Exception e) {
       log.error("Error while getting status for job {}", context.getQueryHandleString(), e);
       context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.FAILED);
