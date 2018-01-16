@@ -18,23 +18,17 @@
  */
 package org.apache.lens.driver.job.utils;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.lens.driver.job.states.JobState;
+import org.apache.lens.server.api.error.LensException;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.json.JSONObject;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.lens.driver.job.states.JobState;
-import org.apache.lens.server.api.error.LensException;
-
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.InputStream;
 
 
 @Slf4j
@@ -45,6 +39,8 @@ public class JobUtils {
   private static String baseUrl = "https://yoda.azuredatalakeanalytics.net/";
 
   private static Client client = ClientBuilder.newClient(new ClientConfig().register(LoggingFilter.class));
+
+  private static String fetchUrl = "https://puneet879.azuredatalakestore.net/webhdfs/v1/clusters/output/";
 
   private static String querySkeleton = "{  \n"
     + "  \"jobId\": \"<<jobid>>\",  \n"
@@ -101,17 +97,24 @@ public class JobUtils {
         return JobState.FAILED;
       }
       return JobState.RUNNING;
-    } catch (JSONException e) {
+    } catch (Exception e) {
       throw new LensException("Unknown error, unable to parse the result");
     }
   }
 
-  public static InputStream getResult(String jobId, String bearerToken) throws LensException {
-    try {
-      return new FileInputStream("/tmp/dummy.csv");
-    } catch (FileNotFoundException e) {
-      throw new LensException(e);
-    }
+  public static InputStream getResult(String jobId, String bearerToken) {
+    String requestUrl = fetchUrl + jobId + ".csv" + "?op=open";
+    log.debug("Fetching resource {} using url {}",jobId,requestUrl);
+    WebTarget webResource = client.target(requestUrl);
+    Invocation.Builder x = webResource.request(MediaType.APPLICATION_JSON);
+    x = x.header("Authorization", bearerToken);
+    x = x.accept("application/json");
+    Response response = x.get();
+    log.debug("Received response with status code {}",response.getStatus());
+    return response.readEntity(InputStream.class);
   }
+
+
+
 
 }
