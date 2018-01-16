@@ -22,15 +22,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.hadoop.hive.metastore.api.FieldSchema;
-import org.apache.hadoop.hive.serde2.thrift.Type;
-import org.apache.hive.service.cli.ColumnDescriptor;
-import org.apache.lens.driver.jdbc.JDBCResultSet;
 import org.apache.lens.server.api.driver.LensResultSetMetadata;
 import org.apache.lens.server.api.driver.PersistentResultSet;
 import org.apache.lens.server.api.error.LensException;
+
+import org.apache.hive.service.cli.ColumnDescriptor;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 

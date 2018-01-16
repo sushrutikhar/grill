@@ -18,18 +18,20 @@
  */
 package org.apache.lens.driver.job.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.lens.driver.job.states.JobState;
-import org.apache.lens.server.api.error.LensException;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.json.JSONObject;
+import java.io.InputStream;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
 
+import org.apache.lens.driver.job.states.JobState;
+import org.apache.lens.server.api.error.LensException;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.json.JSONObject;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JobUtils {
@@ -104,13 +106,13 @@ public class JobUtils {
 
   public static InputStream getResult(String jobId, String bearerToken) {
     String requestUrl = fetchUrl + jobId + ".csv" + "?op=open";
-    log.debug("Fetching resource {} using url {}",jobId,requestUrl);
+    log.debug("Fetching resource {} using url {}", jobId, requestUrl);
     WebTarget webResource = client.target(requestUrl);
     Invocation.Builder x = webResource.request(MediaType.APPLICATION_JSON);
     x = x.header("Authorization", bearerToken);
     x = x.accept("application/json");
     Response response = x.get();
-    log.debug("Received response with status code {}",response.getStatus());
+    log.debug("Received response with status code {}", response.getStatus());
     return response.readEntity(InputStream.class);
   }
 
