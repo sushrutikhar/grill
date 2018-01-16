@@ -8,15 +8,15 @@ import org.apache.lens.server.api.error.LensException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.UUID;
+import java.io.InputStream;
 
 public class JobUtils {
 
     private static final String baseUrl = "https://yoda.azuredatalakeanalytics.net/";
+
+    private static final String fetchUrl = "https://puneet879.azuredatalakestore.net/webhdfs/v1/clusters/output/<<jobid>>.csv";
 
     private static Client client = Client.create();
 
@@ -33,7 +33,6 @@ public class JobUtils {
             "}  ";
 
     public static void submitJob(String jobId, String payload, String bearerToken) throws LensException{
-        System.out.println(bearerToken.length());
         payload = payload.replace("\"","\\\"");
         String finalquery = querySkeleton.replace("<<script>>", payload);
         finalquery = finalquery.replace("<<jobid>>", jobId);
@@ -50,7 +49,6 @@ public class JobUtils {
     }
 
     public static JobState getStatus(String jobId, String bearerToken) throws LensException {
-        System.out.println(bearerToken.length());
         String requestUrl = baseUrl + "jobs/" + jobId +"?api-version=2016-11-01";
         WebResource webResource = client.resource(requestUrl);
         WebResource.Builder x = webResource.header("Content-Type", "application/json");
@@ -74,6 +72,7 @@ public class JobUtils {
 
     public static InputStream getResult(String jobId, String bearerToken) throws LensException{
         try {
+
             return new FileInputStream("/tmp/dummy.csv");
         } catch (FileNotFoundException e) {
             throw new LensException(e);
