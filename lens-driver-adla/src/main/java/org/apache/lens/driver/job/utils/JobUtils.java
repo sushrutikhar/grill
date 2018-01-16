@@ -97,7 +97,7 @@ public class JobUtils {
       if (jsonObject.get("result").toString().trim().equals("Succeeded")) {
         return JobState.COMPLETED;
       }
-      if (jsonObject.get("Failed").toString().trim().equals("Running")) {
+      if (jsonObject.get("result").toString().trim().equals("Failed")) {
         return JobState.FAILED;
       }
       return JobState.RUNNING;

@@ -23,6 +23,7 @@ import java.io.*;
 import org.apache.lens.api.query.QueryHandle;
 import org.apache.lens.api.query.QueryPrepareHandle;
 import org.apache.lens.driver.adla.translator.SummaryAzureQueryRewriter;
+import org.apache.lens.driver.job.states.JobState;
 import org.apache.lens.driver.job.utils.JobUtils;
 import org.apache.lens.server.api.LensConfConstants;
 import org.apache.lens.server.api.driver.*;
@@ -40,6 +41,7 @@ import org.apache.hadoop.conf.Configuration;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.omg.PortableServer.THREAD_POLICY_ID;
 
 @Slf4j
 
@@ -119,8 +121,33 @@ public class ADLADriver extends AbstractLensDriver {
   public void updateStatus(QueryContext context) throws LensException {
     //Update status of ADLA JOB
     log.info("Updating status for query {} ", context.getQueryHandleString());
-    if (System.currentTimeMillis() - context.getSubmissionTime() > 10000) {
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    JobState state = null;
+    try {
+      state = JobUtils.getStatus(context.getQueryHandleString(),getBearerToken(context));
+    } catch (Exception e) {
+      log.error("Error while getting status for job {}", context.getQueryHandleString(), e);
+      context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.FAILED);
+      return;
+    }
+
+    if (state.equals(JobState.COMPLETED)){
+      log.error("State for job {} is COMPLETED", context.getQueryHandleString());
       context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.SUCCESSFUL);
+    } else if (state.equals(JobState.FAILED)){
+      log.error("State for job {} is FAILED", context.getQueryHandleString());
+      context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.FAILED);
+    } else if (state.equals(JobState.RUNNING)){
+      log.error("State for job {} is RUNNING", context.getQueryHandleString());
+      context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.RUNNING);
+    } else if (state.equals(JobState.DOES_NOT_EXIST)){
+      log.error("Could not find state for job {}", context.getQueryHandleString());
+      context.getDriverStatus().setState(DriverQueryStatus.DriverQueryState.FAILED);
     }
   }
 
